@@ -23,7 +23,7 @@ public class Similar {
                         Math.min(dp[i - 1][j] + 1,    // 删除s1的第i个字符
                                 dp[i][j - 1] + 1),   // 插入s2的第j个字符
                         dp[i - 1][j - 1] + cost       // 替换（或匹配）
-                );
+                ) ;
             }
         }
         return dp[m][n];

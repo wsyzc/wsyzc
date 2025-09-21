@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 //主程序入口类，协调各组件完成论文查重流程
-public class main {
+public class Main {
     public static void main(String[] args) {
         // 检查命令行参数是否正确（需要3个参数：原文路径、抄袭版路径、输出路径）
         if (args.length != 3) {

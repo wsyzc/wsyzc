@@ -17,7 +17,6 @@ public class Main {
         FileIO fileIO = new FileIO();
         TextProcess textProcess = new TextProcess();
         Similar similar = new Similar();
-
         try {
             // 1. 读取文件内容
             String origContent = fileIO.read(origPath);
@@ -36,7 +35,7 @@ public class Main {
             System.out.println("重复率: " + result);
         } catch (IOException e) {
             System.err.println("文件操作错误: " + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
             System.exit(1);
         }
     }

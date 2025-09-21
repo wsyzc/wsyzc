@@ -21,7 +21,7 @@ public class FileIO {
     //写入结果到文件
     public void write(String filePath, String result) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(result) ;
+            writer.write(result);
         }
     }
 }

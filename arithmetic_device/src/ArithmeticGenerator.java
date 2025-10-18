@@ -5,10 +5,9 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /*
- 算术题生成器类，支持生成含整数与真分数的四则运算题（+、-、×、÷）
- 具备题目去重、运算约束（减法非负、除法结果合规）、自定义输出路径等功能
- 最终生成的习题与答案分别保存到指定路径下的Exercises.txt和Answers.txt
-*/
+  算术题生成器类，用于生成含整数和真分数的四则运算题（+、-、×、÷）
+  支持题目去重、运算约束（减法结果非负、除法结果为真分数或整数），并将习题和答案输出到指定目录
+ */
 public class ArithmeticGenerator {
     // 数值范围：生成的整数、分数分子/分母均不超过此范围（整数为0~range-1，分母为2~range）
     private final int range;
@@ -19,14 +18,11 @@ public class ArithmeticGenerator {
     // 习题与答案的输出目录路径：指定文件生成的位置
     private final String outputPath;
 
-
-    //构造算术题生成器
-
+    // 构造算术题生成器
     public ArithmeticGenerator(int range, String outputPath) {
-        this.range = range;//数值范围，控制生成的整数、分数分子/分母的最大值
-        this.outputPath = outputPath;//输出目录路径，习题和答案文件将保存到该目录下
+        this.range = range; //数值范围，控制生成的整数、分数分子/分母的最大值
+        this.outputPath = outputPath; //输出目录路径，习题和答案文件将保存到该目录下
     }
-
 
     //核心方法：生成指定数量的算术题，并将习题和答案写入对应文件
     public void generate(int n) throws IOException {
@@ -105,7 +101,6 @@ public class ArithmeticGenerator {
         return new Expression(left, right, op);
     }
 
-
     //生成随机数值（整数或真分数）
     private Fraction generateNumber() {
         if (random.nextBoolean()) {
@@ -119,14 +114,11 @@ public class ArithmeticGenerator {
         }
     }
 
-
-    // 随机获取一个运算符（+、-、×、÷）
-
+   //随机获取一个运算符（+、-、×、÷）
     private char getRandomOperator() {
         char[] ops = {'+', '-', '×', '÷'}; // 支持的四则运算符
         return ops[random.nextInt(ops.length)]; // 随机选择一个运算符
     }
-
 
     //将列表内容按序号写入指定文件（格式：1. 内容，2. 内容...）
     private void writeToFile(String filename, List<String> lines) throws IOException {
@@ -149,20 +141,19 @@ public class ArithmeticGenerator {
         char operator;          // 运算符（内部节点非0，叶子节点为0），取值：+、-、×、÷
         Fraction value;         // 数值（叶子节点非null，内部节点为null）
 
-
         //构造叶子节点（仅包含数值，无操作符）
-        Expression(Fraction value) {
-            this.value = value;//节点对应的数值（整数或分数）
-        }
 
+        Expression(Fraction value) {
+            this.value = value;
+        }
 
         //构造内部节点（包含左右子表达式和运算符）
-        Expression(Expression left, Expression right, char operator) {
-            this.left = left;
-            this.right = right;
-            this.operator = operator;
-        }
 
+        Expression(Expression left, Expression right, char operator) {
+            this.left = left;//左子表达式
+            this.right = right;//右子表达式
+            this.operator = operator;//运算符
+        }
 
         //递归计算表达式的值
         Fraction evaluate() {
@@ -182,7 +173,6 @@ public class ArithmeticGenerator {
             }
         }
 
-
         //生成表达式的字符串表示（自动添加必要括号，避免运算顺序歧义）
         @Override
         public String toString() {
@@ -196,11 +186,11 @@ public class ArithmeticGenerator {
 
             // 左子表达式优先级低于当前运算符：需加括号（避免运算顺序错误）
             if (left.operator != 0 && precedence(this.operator) > precedence(left.operator)) {
-                leftStr = "(" + leftStr + ")";
+                leftStr = "( " + leftStr + " )";
             }
             // 右子表达式优先级低于或等于当前运算符：需加括号（减法/除法不满足交换律，需严格控制顺序）
             if (right.operator != 0 && precedence(this.operator) >= precedence(right.operator)) {
-                rightStr = "(" + rightStr + ")";
+                rightStr = "( " + rightStr + " )";
             }
 
             // 拼接成"左表达式 运算符 右表达式"格式
@@ -208,8 +198,8 @@ public class ArithmeticGenerator {
         }
 
         /*
-         生成表达式的规范化字符串（用于题目去重）
-         核心逻辑：利用加法/乘法交换律，统一操作数顺序（如1+2与2+1生成同一字符串）
+          生成表达式的规范化字符串（用于题目去重）
+          核心逻辑：利用加法/乘法交换律，统一操作数顺序（如1+2与2+1生成同一字符串）
          */
         public String toCanonicalString() {
             // 叶子节点：直接返回数值字符串
